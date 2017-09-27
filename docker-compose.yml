@@ -1,0 +1,20 @@
+---
+version: '2'
+services:
+  # This container is in charge of messenger message management
+  # Send all the message to the "messenger-message-inbox" queue
+  chatbox-messenger-app:
+    image: dataspartan/chatbox-messenger-app
+    hostname: chatbox-messenger-app
+    ports:
+      - '5000:5000'
+    environment:
+      - APP_SECRET=a0bbc1b916da7a0300492c615deb0b73
+      - VALIDATION_TOKEN=EAAcJwZC7SUf0BAHZB5lomnwWldn0XZBgP74jgb8YXeXZAx5tJrSdvwr9IDPuWITrGCVZC0xW9ijntXHrjJBlPFIik2msz7p199ZCXp24rhaSnxcbianamtduQ5OUZBF4Ws0XZCRXQqZCG4f1N7Y3pd2a4wES5ZBvNngbGgDkZABnY7ovQZDZD
+      - PAGE_ACCESS_TOKEN=chatbox_web_token
+      - SERVER_URL=https://212.51.59.55
+      - ZOOKEEPER_SERVER=HortonWorks21:2181
+      - DEBUG=true
+    extra_hosts:
+       - "HortonWorks21:10.20.1.21"
+       - "hortonworks21:10.20.1.21"

@@ -1,0 +1,8 @@
+{
+    "appSecret": "a49b6be3efdc78cfb8055f2530cb44dd",
+    "pageAccessToken": "EAAMiNylS1WUBABU5EZC9rPid47ZAlZAHvkLDQXwM1KZCLvmUf3fBxr1uy64UckgLSFPHnopiQB0oLvmQxYVnTYXSd4mSUbgZCO3yc3fUKbIbCm62TwLkZAFoHXtoGQZBf8VcmolkxsRB31UBYkDvaehdhcBM7Xhrsl4EdBChgmbgzUE3af1wgZAYOb4wl1ODIzMZD",
+    "validationToken": "chatbox_web_token",
+    "serverURL": "https://212.51.59.55",
+    "zookeeperServer": "HortonWorks21:2181",
+    "debug" : true
+}
