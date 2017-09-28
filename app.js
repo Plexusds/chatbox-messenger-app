@@ -16,14 +16,31 @@ const
   crypto = require('crypto'),
   express = require('express'),
   https = require('https'),
+  fs = require('fs'),
   request = require('request'),
   Client = require('node-rest-client').Client;
+
+var privateKey = fs.readFileSync('sslcert/key.pem', 'utf8');
+var certificate = fs.readFileSync('sslcert/cert.pem', 'utf8');
+var credentials = { key: privateKey, cert: certificate };
 
 var app = express();
 app.set('port', process.env.PORT || 5000);
 app.set('view engine', 'ejs');
 app.use(bodyParser.json({ verify: verifyRequestSignature }));
 app.use(express.static('public'));
+
+/*
+var options = {
+  key: fs.readFileSync('sslcertificates/key.pem'),
+  cert: fs.readFileSync('sslcertificates/cert.pem')
+};
+
+var a = https.createServer(options, function (req, res) {
+  res.writeHead(200);
+  res.end("hello world\n");
+}).listen(8000);
+*/
 
 /*
  * Be sure to setup your config values before running this code. You can
@@ -35,38 +52,38 @@ app.use(express.static('public'));
 const APP_SECRET = (process.env.MESSENGER_APP_SECRET) ?
   process.env.MESSENGER_APP_SECRET :
   config.get('appSecret');
-console.log('APP_SECRET: '+APP_SECRET);
+console.log('APP_SECRET: ' + APP_SECRET);
 
 // Arbitrary value used to validate a webhook
 const VALIDATION_TOKEN = (process.env.MESSENGER_VALIDATION_TOKEN) ?
   (process.env.MESSENGER_VALIDATION_TOKEN) :
   config.get('validationToken');
-  console.log('VALIDATION_TOKEN: '+VALIDATION_TOKEN);
+console.log('VALIDATION_TOKEN: ' + VALIDATION_TOKEN);
 
 // Generate a page access token for your page from the App Dashboard
 const PAGE_ACCESS_TOKEN = (process.env.MESSENGER_PAGE_ACCESS_TOKEN) ?
   (process.env.MESSENGER_PAGE_ACCESS_TOKEN) :
   config.get('pageAccessToken');
-  console.log('PAGE_ACCESS_TOKEN: '+PAGE_ACCESS_TOKEN);
+console.log('PAGE_ACCESS_TOKEN: ' + PAGE_ACCESS_TOKEN);
 
 // URL where the app is running (include protocol). Used to point to scripts and
 // assets located at this address.
 const SERVER_URL = (process.env.SERVER_URL) ?
   (process.env.SERVER_URL) :
   config.get('serverURL');
-  console.log('SERVER_URL: '+SERVER_URL);
+console.log('SERVER_URL: ' + SERVER_URL);
 
 // Server Url where the zookeper is running.
 const ZOOKEEPER_SERVER = (process.env.ZOOKEEPER_SERVER) ?
   (process.env.ZOOKEEPER_SERVER) :
   config.get('zookeeperServer');
-  console.log('ZOOKEEPER_SERVER: '+ZOOKEEPER_SERVER);
+console.log('ZOOKEEPER_SERVER: ' + ZOOKEEPER_SERVER);
 
 // Value for set if the debug is actived
 const DEBUG = (process.env.DEBUG) ?
   (process.env.DEBUG) :
   config.get('debug');
-  console.log('DEBUG: '+DEBUG);
+console.log('DEBUG: ' + DEBUG);
 
 if (!(APP_SECRET && VALIDATION_TOKEN && PAGE_ACCESS_TOKEN && SERVER_URL && ZOOKEEPER_SERVER)) {
   console.error("Missing config values");
@@ -115,24 +132,27 @@ app.post('/webhook', function (req, res) {
       var timeOfEvent = pageEntry.time;
 
       // Iterate over each messaging event
-      console.debug(pageEntry);
-      pageEntry.messaging.forEach(function (messagingEvent) {
-        if (messagingEvent.optin) {
-          receivedAuthentication(messagingEvent);
-        } else if (messagingEvent.message) {
-          receivedMessage(messagingEvent);
-        } else if (messagingEvent.delivery) {
-          receivedDeliveryConfirmation(messagingEvent);
-        } else if (messagingEvent.postback) {
-          receivedPostback(messagingEvent);
-        } else if (messagingEvent.read) {
-          receivedMessageRead(messagingEvent);
-        } else if (messagingEvent.account_linking) {
-          receivedAccountLink(messagingEvent);
-        } else {
-          console.log("Webhook received unknown messagingEvent: ", messagingEvent);
-        }
-      });
+      console.debug(JSON.stringify(pageEntry));
+      if (pageEntry.messaging
+        && pageEntry.messaging.forEach) {
+        pageEntry.messaging.forEach(function (messagingEvent) {
+          if (messagingEvent.optin) {
+            receivedAuthentication(messagingEvent);
+          } else if (messagingEvent.message) {
+            receivedMessage(messagingEvent);
+          } else if (messagingEvent.delivery) {
+            receivedDeliveryConfirmation(messagingEvent);
+          } else if (messagingEvent.postback) {
+            receivedPostback(messagingEvent);
+          } else if (messagingEvent.read) {
+            receivedMessageRead(messagingEvent);
+          } else if (messagingEvent.account_linking) {
+            receivedAccountLink(messagingEvent);
+          } else {
+            console.log("Webhook received unknown messagingEvent: ", messagingEvent);
+          }
+        });
+      }
     });
 
     // Assume all went well.
@@ -877,9 +897,15 @@ function callSendAPI(messageData) {
 // Start server
 // Webhooks must be available via SSL with a certificate signed by a valid
 // certificate authority.
-app.listen(app.get('port'), function () {
-  console.log('Node app is running on port', app.get('port'));
+// app.listen(app.get('port'), function () {
+//   console.log('Node app is running on port', app.get('port'));
+// });
+
+var httpsServer = https.createServer(credentials, app);
+httpsServer.listen(app.get('port'), function () {
+  console.log('Node app https is running on port ', app.get('port'));
 });
+
 
 // This keeps your server running and also give you a place to attach the debugger and look for a deeper problem
 process.on('uncaughtException', function (err) {
@@ -893,7 +919,7 @@ process.on('uncaughtException', function (err) {
 
 if (DEBUG) {
   console.log
-  (`
+    (`
 
   /**
    *          IMPORTANT INFORMATION 
@@ -912,16 +938,16 @@ if (DEBUG) {
     IT WILL NOT HAPPENS IN PRODUCTION ENVIRONMENT
     `);
 
-    function sleep(milliseconds) {
-      var start = new Date().getTime();
-      for (var i = 0; i < 1e7; i++) {
-        if ((new Date().getTime() - start) > milliseconds){
-          break;
-        }
+  function sleep(milliseconds) {
+    var start = new Date().getTime();
+    for (var i = 0; i < 1e7; i++) {
+      if ((new Date().getTime() - start) > milliseconds) {
+        break;
       }
     }
-    console.log('sleeping the app for 60.000 ms');
-    sleep(60000);
+  }
+  console.log('sleeping the app for 60.000 ms');
+  sleep(60000);
 }
 
 /**
