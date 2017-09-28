@@ -1,8 +1,8 @@
 {
-    "appSecret": "a49b6be3efdc78cfb8055f2530cb44dd",
-    "pageAccessToken": "EAAMiNylS1WUBABU5EZC9rPid47ZAlZAHvkLDQXwM1KZCLvmUf3fBxr1uy64UckgLSFPHnopiQB0oLvmQxYVnTYXSd4mSUbgZCO3yc3fUKbIbCm62TwLkZAFoHXtoGQZBf8VcmolkxsRB31UBYkDvaehdhcBM7Xhrsl4EdBChgmbgzUE3af1wgZAYOb4wl1ODIzMZD",
+    "appSecret": "a0bbc1b916da7a0300492c615deb0b73",
+    "pageAccessToken": "EAAcJwZC7SUf0BAMVvQo1DpjSVCRtAiwrJeDKSop9LmXz88Jk7qaPZCsxLuHbZCv7Ex4utR3qUzndtLFGC6kqdGKkXs5QRaUMeg82XuD7Bk9ZAcBTv7fCFkLxp2zsBDWCjZCcMhHkpNqRjXj8XeXPAUaSZAMh1OXE8EpYUi2gIY6AZDZD",
     "validationToken": "chatbox_web_token",
-    "serverURL": "https://212.51.59.55",
+    "serverURL": "https://2e2cf364.ngrok.io",
     "zookeeperServer": "HortonWorks21:2181",
     "debug" : true
 }

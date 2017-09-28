@@ -20,12 +20,13 @@ const
   request = require('request'),
   Client = require('node-rest-client').Client;
 
-var privateKey = fs.readFileSync('sslcert/key.pem', 'utf8');
-var certificate = fs.readFileSync('sslcert/cert.pem', 'utf8');
+var privateKey = fs.readFileSync('sslcert/certificate.key', 'utf8');
+var certificate = fs.readFileSync('sslcert/certificate.crt', 'utf8');
 var credentials = { key: privateKey, cert: certificate };
 
 var app = express();
-app.set('port', process.env.PORT || 5000);
+app.set('port', process.env.PORT_HTTPS || 5080);
+app.set('portssl', process.env.PORT_HTTP || 5000);
 app.set('view engine', 'ejs');
 app.use(bodyParser.json({ verify: verifyRequestSignature }));
 app.use(express.static('public'));
@@ -897,13 +898,13 @@ function callSendAPI(messageData) {
 // Start server
 // Webhooks must be available via SSL with a certificate signed by a valid
 // certificate authority.
-// app.listen(app.get('port'), function () {
-//   console.log('Node app is running on port', app.get('port'));
-// });
+app.listen(app.get('port'), function () {
+  console.log('Node app http is running on port', app.get('port'));
+});
 
 var httpsServer = https.createServer(credentials, app);
-httpsServer.listen(app.get('port'), function () {
-  console.log('Node app https is running on port ', app.get('port'));
+httpsServer.listen(app.get('portssl'), function () {
+  console.log('Node app https is running on port ', app.get('portssl'));
 });
 
 
