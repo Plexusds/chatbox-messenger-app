@@ -118,8 +118,8 @@ console.debug = (function () {
  *
  */
 app.get('/webhook', function (req, res) {
-  console.log("req.query['hub.mode'] = "+req.query['hub.mode']);
-  console.log("req.query['hub.verify_token'] = "+req.query['hub.verify_token']);
+  console.log("req.query['hub.mode'] = " + req.query['hub.mode']);
+  console.log("req.query['hub.verify_token'] = " + req.query['hub.verify_token']);
   if (req.query['hub.mode'] === 'subscribe' &&
     req.query['hub.verify_token'] === VALIDATION_TOKEN) {
     console.log("Validating webhook");
