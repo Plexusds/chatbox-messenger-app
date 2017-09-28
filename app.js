@@ -22,11 +22,26 @@ const
 
 var privateKey = fs.readFileSync('sslcert/certificate.key', 'utf8');
 var certificate = fs.readFileSync('sslcert/certificate.crt', 'utf8');
-var credentials = { key: privateKey, cert: certificate };
+var cacerts = fs.readFileSync('sslcert/certificate.ca.crt', 'utf8');
+
+var credentials = {
+  // Server SSL private key and certificate 
+  key: privateKey,
+  cert: certificate,
+  // issuer/CA certificate against which the client certificate will be 
+  // validated. A certificate that is not signed by a provided CA will be 
+  // rejected at the protocol layer. 
+  ca: cacerts,
+  // request a certificate, but don't necessarily reject connections from 
+  // clients providing an untrusted or no certificate. This lets us protect only 
+  // certain routes, or send a helpful error message to unauthenticated clients. 
+  requestCert: true,
+  rejectUnauthorized: false
+};
 
 var app = express();
 app.set('port', process.env.PORT_HTTPS || 5080);
-app.set('portssl', process.env.PORT_HTTP || 443);
+app.set('portssl', process.env.PORT_HTTP || 5000);
 app.set('view engine', 'ejs');
 app.use(bodyParser.json({ verify: verifyRequestSignature }));
 app.use(express.static('public'));
