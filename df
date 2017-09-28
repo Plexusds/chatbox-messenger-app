@@ -1,0 +1,91 @@
+[1mdiff --git a/.dockerignore b/.dockerignore[m
+[1mindex 5171c54..e672e62 100644[m
+[1m--- a/.dockerignore[m
+[1m+++ b/.dockerignore[m
+[36m@@ -1,2 +1 @@[m
+[31m-node_modules[m
+[31m-npm-debug.log[m
+\ No newline at end of file[m
+[32m+[m[32msslcerts[m
+[1mdiff --git a/app.js b/app.js[m
+[1mindex a405080..f83159b 100644[m
+[1m--- a/app.js[m
+[1m+++ b/app.js[m
+[36m@@ -25,16 +25,16 @@[m [mvar certificate = fs.readFileSync('sslcert/certificate.crt', 'utf8');[m
+ var cacerts = fs.readFileSync('sslcert/certificate.ca.crt', 'utf8');[m
+ [m
+ var credentials = {[m
+[31m-  // Server SSL private key and certificate [m
+[32m+[m[32m  // Server SSL private key and certificate[m
+   key: privateKey,[m
+   cert: certificate,[m
+[31m-  // issuer/CA certificate against which the client certificate will be [m
+[31m-  // validated. A certificate that is not signed by a provided CA will be [m
+[31m-  // rejected at the protocol layer. [m
+[32m+[m[32m  // issuer/CA certificate against which the client certificate will be[m
+[32m+[m[32m  // validated. A certificate that is not signed by a provided CA will be[m
+[32m+[m[32m  // rejected at the protocol layer.[m
+   ca: cacerts,[m
+[31m-  // request a certificate, but don't necessarily reject connections from [m
+[31m-  // clients providing an untrusted or no certificate. This lets us protect only [m
+[31m-  // certain routes, or send a helpful error message to unauthenticated clients. [m
+[32m+[m[32m  // request a certificate, but don't necessarily reject connections from[m
+[32m+[m[32m  // clients providing an untrusted or no certificate. This lets us protect only[m
+[32m+[m[32m  // certain routes, or send a helpful error message to unauthenticated clients.[m
+   requestCert: true,[m
+   rejectUnauthorized: false[m
+ };[m
+[36m@@ -96,8 +96,8 @@[m [mconst ZOOKEEPER_SERVER = (process.env.ZOOKEEPER_SERVER) ?[m
+ console.log('ZOOKEEPER_SERVER: ' + ZOOKEEPER_SERVER);[m
+ [m
+ // Value for set if the debug is actived[m
+[31m-const DEBUG = (process.env.DEBUG) ?[m
+[31m-  (process.env.DEBUG) :[m
+[32m+[m[32mconst DEBUG = (process.env.CHATBOX_MESSENGER_APP_DEBUG) ?[m
+[32m+[m[32m  (process.env.CHATBOX_MESSENGER_APP_DEBUG) :[m
+   config.get('debug');[m
+ console.log('DEBUG: ' + DEBUG);[m
+ [m
+[36m@@ -619,7 +619,7 @@[m [mfunction sendToKafka(senderID, message) {[m
+ [m
+ /*[m
+  * Send a button message using the Send API.[m
+[31m- * [m
+[32m+[m[32m *[m
+  */[m
+ function sendButtonMessage(recipientId) {[m
+   var messageData = {[m
+[36m@@ -940,7 +940,7 @@[m [mif (DEBUG) {[m
+     (`[m
+ [m
+   /**[m
+[31m-   *          IMPORTANT INFORMATION [m
+[32m+[m[32m   *          IMPORTANT INFORMATION[m
+    */[m
+     VERSION KAFKA PROBLEMS[m
+     WHEN USING KAFKA-NODE WITH[m
+[36m@@ -948,7 +948,7 @@[m [mif (DEBUG) {[m
+     KAFKA PRODUCER WORKS CORRECTLY (WAIT UNTIL BROKER IS AVAILABLE)[m
+ [m
+     BUT WITH VERSION 0.10.1.0 (DOCKER IMAGE OF confluentinc/cp-enterprise-kafka:3.1.2)[m
+[31m-    WE MUST USE THIS VERSION BECOUSE THE HDP-2.6.2 HAS Apache Kafka 0.10.1.2 [m
+[32m+[m[32m    WE MUST USE THIS VERSION BECOUSE THE HDP-2.6.2 HAS Apache Kafka 0.10.1.2[m
+     IF THE KAFKA BROKER NOT EXISTS, IT DOES NOT WAIT AND PRODUCER DOESNT WORK[m
+     kafka producer Exception: NO_NODE[-101][m
+ [m
+[36m@@ -970,7 +970,7 @@[m [mif (DEBUG) {[m
+ [m
+ /**[m
+  * Kafka configuration[m
+[31m- * [m
+[32m+[m[32m *[m
+  */[m
+ var kafka = require('kafka-node');[m
+ var KAFKA_CLIENT_ID = "messenger-message-inbox";[m
+[36m@@ -986,4 +986,4 @@[m [mproducer[m
+     console.log('kafka producer error: ' + err);[m
+   });[m
+ [m
+[31m-module.exports = app;[m
+\ No newline at end of file[m
+[32m+[m[32mmodule.exports = app;[m

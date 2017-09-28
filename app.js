@@ -25,16 +25,16 @@ var certificate = fs.readFileSync('sslcert/certificate.crt', 'utf8');
 var cacerts = fs.readFileSync('sslcert/certificate.ca.crt', 'utf8');
 
 var credentials = {
-  // Server SSL private key and certificate 
+  // Server SSL private key and certificate
   key: privateKey,
   cert: certificate,
-  // issuer/CA certificate against which the client certificate will be 
-  // validated. A certificate that is not signed by a provided CA will be 
-  // rejected at the protocol layer. 
+  // issuer/CA certificate against which the client certificate will be
+  // validated. A certificate that is not signed by a provided CA will be
+  // rejected at the protocol layer.
   ca: cacerts,
-  // request a certificate, but don't necessarily reject connections from 
-  // clients providing an untrusted or no certificate. This lets us protect only 
-  // certain routes, or send a helpful error message to unauthenticated clients. 
+  // request a certificate, but don't necessarily reject connections from
+  // clients providing an untrusted or no certificate. This lets us protect only
+  // certain routes, or send a helpful error message to unauthenticated clients.
   requestCert: true,
   rejectUnauthorized: false
 };
@@ -96,8 +96,8 @@ const ZOOKEEPER_SERVER = (process.env.ZOOKEEPER_SERVER) ?
 console.log('ZOOKEEPER_SERVER: ' + ZOOKEEPER_SERVER);
 
 // Value for set if the debug is actived
-const DEBUG = (process.env.DEBUG) ?
-  (process.env.DEBUG) :
+const DEBUG = (process.env.CHATBOX_MESSENGER_APP_DEBUG) ?
+  (process.env.CHATBOX_MESSENGER_APP_DEBUG) :
   config.get('debug');
 console.log('DEBUG: ' + DEBUG);
 
@@ -619,7 +619,7 @@ function sendToKafka(senderID, message) {
 
 /*
  * Send a button message using the Send API.
- * 
+ *
  */
 function sendButtonMessage(recipientId) {
   var messageData = {
@@ -940,7 +940,7 @@ if (DEBUG) {
     (`
 
   /**
-   *          IMPORTANT INFORMATION 
+   *          IMPORTANT INFORMATION
    */
     VERSION KAFKA PROBLEMS
     WHEN USING KAFKA-NODE WITH
@@ -948,7 +948,7 @@ if (DEBUG) {
     KAFKA PRODUCER WORKS CORRECTLY (WAIT UNTIL BROKER IS AVAILABLE)
 
     BUT WITH VERSION 0.10.1.0 (DOCKER IMAGE OF confluentinc/cp-enterprise-kafka:3.1.2)
-    WE MUST USE THIS VERSION BECOUSE THE HDP-2.6.2 HAS Apache Kafka 0.10.1.2 
+    WE MUST USE THIS VERSION BECOUSE THE HDP-2.6.2 HAS Apache Kafka 0.10.1.2
     IF THE KAFKA BROKER NOT EXISTS, IT DOES NOT WAIT AND PRODUCER DOESNT WORK
     kafka producer Exception: NO_NODE[-101]
 
@@ -970,7 +970,7 @@ if (DEBUG) {
 
 /**
  * Kafka configuration
- * 
+ *
  */
 var kafka = require('kafka-node');
 var KAFKA_CLIENT_ID = "messenger-message-inbox";
