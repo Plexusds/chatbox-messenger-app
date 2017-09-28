@@ -26,7 +26,7 @@ var credentials = { key: privateKey, cert: certificate };
 
 var app = express();
 app.set('port', process.env.PORT_HTTPS || 5080);
-app.set('portssl', process.env.PORT_HTTP || 5000);
+app.set('portssl', process.env.PORT_HTTP || 443);
 app.set('view engine', 'ejs');
 app.use(bodyParser.json({ verify: verifyRequestSignature }));
 app.use(express.static('public'));
